@@ -15,7 +15,7 @@ class Container extends Component {
   }
 
   componentWillMount() {
-    this.ref = base.syncState('chats', {
+    this.ref = base.syncState(`/chats/${this.props.room}`, {
       context: this,
       state: 'messages',
       asArray: true
@@ -53,14 +53,20 @@ class Container extends Component {
   render() {
 
     var messages = this.state.messages.map((item, index) => {
-      return (
-        <Message
-          thread={ item }
-          show={ this.state.show === index }
-          removeMessage={ this._removeMessage.bind(this, index) }
-          handleClick={ this._toggleView.bind(this, index) }
-          key={ index } />
-      );
+        let newAuthor = true;
+        if(this.state.messages[index-1] && item.author.email === this.state.messages[index-1].author.email) {
+          newAuthor = false
+        }
+
+        return (
+          <Message
+            newAuthor={ newAuthor }
+            thread={ item }
+            show={ this.state.show === index }
+            removeMessage={ this._removeMessage.bind(this, index) }
+            handleClick={ this._toggleView.bind(this, index) }
+            key={ index } />
+        );
     });
 
     return (

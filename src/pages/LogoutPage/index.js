@@ -1,6 +1,7 @@
 import base from '../../shared/Base';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
 class LogoutPage extends Component {
 
@@ -23,7 +24,13 @@ class LogoutPage extends Component {
 
     componentWillMount() {
         base.unauth();
-        this.context.router.history.push('/')
+        this.context.router.push('/login')
+    }
+
+    render() {
+        return (
+            <p>Redirecting to login page... <Link to='/login'>Login Again.</Link></p>
+        )
     }
 
 }

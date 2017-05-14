@@ -9,26 +9,46 @@ import base from '../../shared/Base'
 class ChatPage extends Component {
   constructor(props) {
     super(props);
+
+    const uid = window.localStorage.getItem('USER')
+
     this.state = {
       messages: [],
-      uid: null
+      user: null
     };
+
+    base.fetch(`/users/${uid}`, { 
+        context: this, asArray: false,
+    }).then(data => {
+      this.state.user = data
+    }).catch(err => {
+      this.context.router.push('/login')
+    })
+
+    console.log(`This is the user ${ this.state.user }`)
   }
 
-  componentWillMount() {
-    base.bindToState('chats', {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
+  componentDidMount() {
+    base.bindToState(`/chats/${ this.props.params.room }`, {
       context: this,
       state: 'messages',
       asArray: true
     });
   }
-  
+
   render() {
+
+    const { user } = this.state
+
     return (
         <div>
             <Grid fluid>
-                <Container />
-                <NewChat chats={ this.state.messages } />
+                <Container room={ this.props.params.room } />
+                <NewChat room={ this.props.params.room } user={ user } chats={ this.state.messages } />
             </Grid>
         </div>
     );

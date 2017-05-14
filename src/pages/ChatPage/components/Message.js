@@ -7,9 +7,12 @@ import Chip from 'material-ui/Chip';
 class Message extends Component {
   render() {
     return (
-      <Chip style={{margin: '4px 0px'}}>
-        {this.props.thread.message}  
-      </Chip>
+      <div>
+        <span className='message-author'>{this.props.newAuthor ? this.props.thread.author.email : null}</span>
+        <Chip style={{margin: '4px 0px'}}>
+          {this.props.thread.message}
+        </Chip>
+      </div>
     );
   }
 }

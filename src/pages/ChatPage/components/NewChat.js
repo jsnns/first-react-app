@@ -6,6 +6,10 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 
 class NewChat extends Component {
 
+    static propTypes = {
+        user: React.PropTypes.object
+    };
+
     constructor(props) {
         super(props);
         this._handleChangeMessage = this._handleChangeMessage.bind(this);
@@ -13,8 +17,7 @@ class NewChat extends Component {
 
     componentWillMount() {
         this.state = {
-            message: undefined,
-            title: undefined
+            message: undefined
         }
     }
 
@@ -22,9 +25,10 @@ class NewChat extends Component {
 
         const messageValue = this.state.message;
 
-        base.post('chats', {
+        base.post(`/chats/${this.props.room}`, {
             data: this.props.chats.concat([{
-                message: messageValue
+                message: messageValue,
+                author: this.props.user
             }]),
             context: this,
             then: () => {
